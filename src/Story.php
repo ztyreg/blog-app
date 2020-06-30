@@ -5,7 +5,7 @@ class Story
     private $id;
     private $user_id;
     private $title;
-    private $body;
+    private $content;
     private $link;
 
     /**
@@ -13,15 +13,15 @@ class Story
      * @param $id
      * @param $user_id
      * @param $title
-     * @param $body
+     * @param $content
      * @param $link
      */
-    public function __construct($id, $user_id, $title, $body, $link)
+    public function __construct($id, $user_id, $title, $content, $link)
     {
         $this->id = $id;
         $this->user_id = $user_id;
         $this->title = $title;
-        $this->body = $body;
+        $this->content = $content;
         $this->link = $link;
     }
 
@@ -117,9 +117,9 @@ class Story
     /**
      * @return mixed
      */
-    public function getBody()
+    public function getContent()
     {
-        return $this->body;
+        return $this->content;
     }
 
     /**

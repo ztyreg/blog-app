@@ -19,11 +19,37 @@ if (isset($_POST['create'])) {
     }
 }
 
+// edit story
+foreach (Story::select_story_by_user_id($session->user_id) as $story) {
+    $button_clicked = 'editstory' . $story->getId();
+    if (isset($_POST[$button_clicked])) {
+        redirect("edit.php?type=story&id=" . $story->getId());
+    }
+}
+
+// edit comment
+foreach (Comment::select_comment_by_user_id($session->user_id) as $comment) {
+    $button_clicked = 'editcomment' . $comment->getId();
+    if (isset($_POST[$button_clicked])) {
+        redirect("edit.php?type=comment&id=" . $comment->getId());
+    }
+}
+
 // delete story
 foreach (Story::select_story_by_user_id($session->user_id) as $story) {
     $button_clicked = 'deletestory' . $story->getId();
     if (isset($_POST[$button_clicked])) {
         Story::delete_story($story->getId());
+        // to prevent the user from submitting the form again by refreshing the page
+        redirect("process.php");
+    }
+}
+
+// delete comment
+foreach (Comment::select_comment_by_user_id($session->user_id) as $comment) {
+    $button_clicked = 'deletecomment' . $comment->getId();
+    if (isset($_POST[$button_clicked])) {
+        Comment::delete_comment($comment->getId());
         // to prevent the user from submitting the form again by refreshing the page
         redirect("process.php");
     }
@@ -56,9 +82,9 @@ include_once("../src/header.php");
 
         Manage your stories and comments here. Or, create a new story. <br><br>
         <div class="tab">
-            <button class="tablinks" onclick="openTab(event, 'Write')" id="WriteTab">New story</button>
-            <button class="tablinks right" onclick="openTab(event, 'Comments')" id="CommentsTab">My comments</button>
-            <button class="tablinks right" onclick="openTab(event, 'Stories')" id="StoriesTab">My stories</button>
+            <button class="tablinks" onclick="openTab(event, 'Stories')" id="StoriesTab">My stories</button>
+            <button class="tablinks" onclick="openTab(event, 'Comments')" id="CommentsTab">My comments</button>
+            <button class="tablinks right" onclick="openTab(event, 'Write')" id="WriteTab">New story</button>
         </div>
 
         <div id="Stories" class="tabcontent">
@@ -71,7 +97,7 @@ include_once("../src/header.php");
                 foreach (Story::select_story_by_user_id($session->user_id) as $story) {
                     echo '<tr>';
                     echo '<td><a href = "stories.php?id=' . $story->getLink() . '" > ' . $story->getTitle() . '</a ></td>';
-                    echo '<td><form action="myposts.php" method="post">';
+                    echo '<td style="width: 200px; text-align: center"><form action="myposts.php" method="post">';
                     echo '<input type="submit" class="btn" value="Edit" name="editstory' . $story->getId() . '"/>';
                     echo '<input type="submit" class="btn" value="Delete" name="deletestory' . $story->getId() . '"/>';
                     echo '</form></td>';
@@ -84,9 +110,9 @@ include_once("../src/header.php");
         <div id="Comments" class="tabcontent">
             <table>
                 <tr>
-                    <th>Story</th>
-                    <th>Comment</th>
-                    <th>Actions</th>
+                    <th style="text-align: center;">Story</th>
+                    <th style="width: 500px; text-align: center">Comment</th>
+                    <th style="text-align: center;">Actions</th>
                 </tr>
                 <?php
                 foreach (Comment::select_comment_by_user_id($session->user_id) as $comment) {
@@ -94,7 +120,7 @@ include_once("../src/header.php");
                     echo '<tr>';
                     echo '<td><a href = "stories.php?id=' . htmlentities($story->getLink()) . '" > ' . $story->getTitle() . '</a ></td>';
                     echo '<td>' . $comment->getContent() . '</td>';
-                    echo '<td><form action="myposts.php" method="post">';
+                    echo '<td style="width: 200px; text-align: center"><form action="myposts.php" method="post">';
                     echo '<input type="submit" class="btn" value="Edit" name="editcomment' . $comment->getId() . '"/>';
                     echo '<input type="submit" class="btn" value="Delete" name="deletecomment' . $comment->getId() . '"/>';
                     echo '</form></td>';

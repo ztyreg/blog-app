@@ -144,13 +144,16 @@ table {
 th {
     font-family: sans-serif;
     border: 1px solid #dddddd;
-    text-align: left;
+    text-align: center;
     padding: 8px;
+}
+
+td {
+    text-align: left;
 }
 
 td, th {
     border: 1px solid #dddddd;
-    text-align: left;
     padding: 8px;
 }
 
