@@ -30,6 +30,14 @@ class Comment
         return self::execute_select($stmt);
     }
 
+    public static function select_comment_by_user_id($user_id)
+    {
+        global $database;
+        $stmt = $database->connection->prepare("SELECT id, user_id, story_id, content FROM comments WHERE user_id=? ORDER BY id;");
+        $stmt->bind_param('s', $user_id);
+        return self::execute_select($stmt);
+    }
+
     private static function execute_select($stmt)
     {
         $stmt->execute();
@@ -57,6 +65,15 @@ class Comment
         if (!$stmt->execute()) {
             echo 'error';
         }
+        $stmt->close();
+    }
+
+    public static function delete_comment(int $comment_id)
+    {
+        global $database;
+        $stmt = $database->connection->prepare("DELETE FROM comments WHERE id=?");
+        $stmt->bind_param('i', $comment_id);
+        $stmt->execute();
         $stmt->close();
     }
 

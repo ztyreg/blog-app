@@ -20,8 +20,8 @@ if (isset($_POST['create'])) {
 }
 
 // delete story
-foreach (Story::select_story_by_user($session->user_id) as $story) {
-    $button_clicked = 'delete' . $story->getId();
+foreach (Story::select_story_by_user_id($session->user_id) as $story) {
+    $button_clicked = 'deletestory' . $story->getId();
     if (isset($_POST[$button_clicked])) {
         Story::delete_story($story->getId());
         // to prevent the user from submitting the form again by refreshing the page
@@ -47,7 +47,7 @@ include_once("../src/header.php");
 <div class="div-wide">
     <div class="div-title">
         <?php
-        echo 'Hello, ' . htmlentities(User::select_user_by_id($session->user_id)[0]->getUsername()) . '!';
+        echo 'Hello, ' . User::find_username_from_id($session->user_id) . '!';
         ?>
     </div>
 
@@ -63,13 +63,17 @@ include_once("../src/header.php");
 
         <div id="Stories" class="tabcontent">
             <table>
+                <tr>
+                    <th>Title</th>
+                    <th>Actions</th>
+                </tr>
                 <?php
-                foreach (Story::select_story_by_user($session->user_id) as $story) {
+                foreach (Story::select_story_by_user_id($session->user_id) as $story) {
                     echo '<tr>';
                     echo '<td><a href = "stories.php?id=' . $story->getLink() . '" > ' . $story->getTitle() . '</a ></td>';
                     echo '<td><form action="myposts.php" method="post">';
-                    echo '<input type="submit" class="btn" value="Edit" name="edit' . $story->getId() . '"/>';
-                    echo '<input type="submit" class="btn" value="Delete" name="delete' . $story->getId() . '"/>';
+                    echo '<input type="submit" class="btn" value="Edit" name="editstory' . $story->getId() . '"/>';
+                    echo '<input type="submit" class="btn" value="Delete" name="deletestory' . $story->getId() . '"/>';
                     echo '</form></td>';
                     echo '</tr>';
                 }
@@ -78,8 +82,26 @@ include_once("../src/header.php");
         </div>
 
         <div id="Comments" class="tabcontent">
-            <h3>Paris</h3>
-            <p>Paris is the capital of France.</p>
+            <table>
+                <tr>
+                    <th>Story</th>
+                    <th>Comment</th>
+                    <th>Actions</th>
+                </tr>
+                <?php
+                foreach (Comment::select_comment_by_user_id($session->user_id) as $comment) {
+                    $story = Story::select_story_by_id($comment->getStoryId())[0];
+                    echo '<tr>';
+                    echo '<td><a href = "stories.php?id=' . htmlentities($story->getLink()) . '" > ' . $story->getTitle() . '</a ></td>';
+                    echo '<td>' . $comment->getContent() . '</td>';
+                    echo '<td><form action="myposts.php" method="post">';
+                    echo '<input type="submit" class="btn" value="Edit" name="editcomment' . $comment->getId() . '"/>';
+                    echo '<input type="submit" class="btn" value="Delete" name="deletecomment' . $comment->getId() . '"/>';
+                    echo '</form></td>';
+                    echo '</tr>';
+                }
+                ?>
+            </table>
         </div>
 
         <div id="Write" class="tabcontent">

@@ -25,7 +25,6 @@ class Story
         $this->link = $link;
     }
 
-
     public static function select_story_by_id(int $story_id)
     {
         global $database;
@@ -34,7 +33,7 @@ class Story
         return self::execute_select($stmt);
     }
 
-    public static function select_story_by_user(int $user_id)
+    public static function select_story_by_user_id(int $user_id)
     {
         global $database;
         $stmt = $database->connection->prepare("SELECT id, user_id, title, content, link FROM stories WHERE user_id=?");
@@ -65,6 +64,12 @@ class Story
     public static function delete_story(int $story_id)
     {
         global $database;
+        // also need to delete comments
+        $stmt = $database->connection->prepare("DELETE FROM comments WHERE story_id=?");
+        $stmt->bind_param('i', $story_id);
+        $stmt->execute();
+        $stmt->close();
+        // delete story
         $stmt = $database->connection->prepare("DELETE FROM stories WHERE id=?");
         $stmt->bind_param('i', $story_id);
         $stmt->execute();

@@ -59,7 +59,7 @@ include_once("../src/header.php");
     <?php
     foreach (Comment::select_comment_by_story_id($_GET['id']) as $comment) {
         echo '<div class="div-comment">';
-        echo htmlentities(User::select_user_by_id($comment->getUserId())[0]->getUsername()) . ': ';
+        echo User::find_username_from_id($comment->getUserId()) . ': ';
         echo $comment->getContent();
         echo '</div>';
     }

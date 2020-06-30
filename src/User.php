@@ -19,6 +19,11 @@ class User
         $this->password = $password;
     }
 
+    public static function find_username_from_id($id)
+    {
+        return htmlentities(User::select_user_by_id($id)[0]->getUsername());
+    }
+
     public static function select_user_by_id($id)
     {
         global $database;
