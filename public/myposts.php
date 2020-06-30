@@ -1,7 +1,34 @@
 <?php
+require_once("../src/init.php");
 
+$post_message = "";
+
+// new post
 if (isset($_POST['create'])) {
+    $title = trim($_POST['title']);
+    $body = trim($_POST['body']);
+    $user_id = $session->user_id;
+    if (empty($title)) {
+        $post_message = "Title cannot be empty!";
+    } elseif (empty($body)) {
+        $post_message = "Story cannot be empty!";
+    } else {
+        $id = Story::create_story($title, $body, $user_id);
+        $post_message = "";
+        redirect("stories.php?id=" . $id);
+    }
 }
+
+// delete story
+foreach (Story::select_story_by_user($session->user_id) as $story) {
+    $button_clicked = 'delete' . $story->getId();
+    if (isset($_POST[$button_clicked])) {
+        Story::delete_story($story->getId());
+        // to prevent the user from submitting the form again by refreshing the page
+        redirect("process.php");
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,48 +54,24 @@ include_once("../src/header.php");
 
         Manage your stories and comments here. Or, create a new story. <br><br>
         <div class="tab">
-            <button class="tablinks" onclick="openTab(event, 'Write')" id="defaultOpen">New story</button>
-            <button class="tablinks right" onclick="openTab(event, 'Comments')">My comments</button>
-            <button class="tablinks right" onclick="openTab(event, 'Stories')">My stories</button>
+            <button class="tablinks" onclick="openTab(event, 'Write')" id="WriteTab">New story</button>
+            <button class="tablinks right" onclick="openTab(event, 'Comments')" id="CommentsTab">My comments</button>
+            <button class="tablinks right" onclick="openTab(event, 'Stories')" id="StoriesTab">My stories</button>
         </div>
 
         <div id="Stories" class="tabcontent">
             <table>
-                <tr>
-                    <th><a href="stories.php">Company</a></th>
-                    <th>Contact</th>
-                    <th>Country</th>
-                </tr>
-                <tr>
-                    <td>Alfreds Futterkiste</td>
-                    <td>Maria Anders</td>
-                    <td>Germany</td>
-                </tr>
-                <tr>
-                    <td>Centro comercial Moctezuma</td>
-                    <td>Francisco Chang</td>
-                    <td>Mexico</td>
-                </tr>
-                <tr>
-                    <td>Ernst Handel</td>
-                    <td>Roland Mendel</td>
-                    <td>Austria</td>
-                </tr>
-                <tr>
-                    <td>Island Trading</td>
-                    <td>Helen Bennett</td>
-                    <td>UK</td>
-                </tr>
-                <tr>
-                    <td>Laughing Bacchus Winecellars</td>
-                    <td>Yoshi Tannamuri</td>
-                    <td>Canada</td>
-                </tr>
-                <tr>
-                    <td>Magazzini Alimentari Riuniti</td>
-                    <td>Giovanni Rovelli</td>
-                    <td>Italy</td>
-                </tr>
+                <?php
+                foreach (Story::select_story_by_user($session->user_id) as $story) {
+                    echo '<tr>';
+                    echo '<td><a href = "stories.php?id=' . $story->getLink() . '" > ' . $story->getTitle() . '</a ></td>';
+                    echo '<td><form action="myposts.php" method="post">';
+                    echo '<input type="submit" class="btn" value="Edit" name="edit' . $story->getId() . '"/>';
+                    echo '<input type="submit" class="btn" value="Delete" name="delete' . $story->getId() . '"/>';
+                    echo '</form></td>';
+                    echo '</tr>';
+                }
+                ?>
             </table>
         </div>
 
@@ -79,22 +82,35 @@ include_once("../src/header.php");
 
         <div id="Write" class="tabcontent">
             <form action="myposts.php" method="post">
-                <div class="div-textarea">
+                <div class="div-story-title">
                     <label for="title"></label>
-                    <textarea class="story-title" id="title" placeholder="Untitled"></textarea>
+                    <textarea class="story-title" id="title" name="title" placeholder="Untitled"><?php
+                        if (isset($_POST['title'])) {
+                            echo htmlentities($_POST['title']);
+                        }
+                        ?></textarea>
                 </div>
-                <div class="div-textarea">
-                    <label for="story"></label>
-                    <textarea class="story-body" id="story" placeholder="Start your story here..."></textarea>
+                <div class="div-story-body">
+                    <label for="body"></label>
+                    <textarea class="story-body" id="body" name="body"
+                              placeholder="Start your story here..."><?php
+                        if (isset($_POST['body'])) {
+                            echo htmlentities($_POST['body']);
+                        }
+                        ?></textarea>
                 </div>
                 <br>
+                <?php
+                echo $post_message;
+                ?>
                 <button class="btn right" name="create">Post</button>
             </form>
         </div>
 
         <script>
-            function openTab(evt, cityName) {
-                var i, tabcontent, tablinks;
+
+            function openTab(evt, sectionName) {
+                let i, tabcontent, tablinks;
                 tabcontent = document.getElementsByClassName("tabcontent");
                 for (i = 0; i < tabcontent.length; i++) {
                     tabcontent[i].style.display = "none";
@@ -103,11 +119,17 @@ include_once("../src/header.php");
                 for (i = 0; i < tablinks.length; i++) {
                     tablinks[i].className = tablinks[i].className.replace(" active", "");
                 }
-                document.getElementById(cityName).style.display = "block";
+                document.getElementById(sectionName).style.display = "block";
+                localStorage.setItem("active", sectionName);
                 evt.currentTarget.className += " active";
             }
 
-            document.getElementById("defaultOpen").click();
+            let activeTab = localStorage.getItem("active");
+            if (activeTab == null) {
+                activeTab = "Write";
+            }
+
+            document.getElementById(activeTab + "Tab").click();
         </script>
 
 

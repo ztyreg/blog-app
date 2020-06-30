@@ -1,3 +1,22 @@
+<?php
+require_once ("../src/init.php");
+
+$title = "";
+$body = "";
+if (!isset($_GET['id'])) {
+    redirect("home.php");
+} else {
+    $story_id = $_GET['id'];
+    if ($story = Story::select_story_by_id($story_id)[0]) {
+        $title = $story->getTitle();
+        $body = $story->getBody();
+    } else {
+        $title = "Ooops...";
+        $body = "Story not found";
+    }
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,11 +33,15 @@ include_once("../src/header.php");
 
 <div class="div-narrow">
     <div class="div-title">
-        Title
+        <?php
+        echo $title;
+        ?>
     </div>
 
     <div class="div-article">
-        X. Shirley Liu is a computational biologist with expertise in cancer epigenetics. Her research focus is by integrating data from ChIP-seq, RIP-seq, DNase-seq, MNase-seq, RNA-seq, and other high throughput genomics data to model the specificity and function of transcription factors, chromatin regulators and lncRNAs in tumor development, progression, drug response and resistance. Her laboratory developed a number of widely used algorithms for transcription factor motif finding, ChIP-chip/seq and DNase-seq data analysis. In epigenetics, she and colleagues generated the first high throughput nucleosome map in the human genome and were the first to use the dynamics of nucleosome and DNase hypersensitivity to predict driving transcription factors and their genome-wide binding in a biological process. In cancer biology, she and colleagues identified the function of estrogen receptor, androgen receptor, and FoxA1 in breast and prostate cancers, found the direct targets of NOTCH1 in T-LL, and reported the switch of EZH2 from a transcriptional repressor as part of the PRC2 to a transcriptional co-activator in hormone independent prostate cancers.
+        <?php
+        echo $body;
+        ?>
     </div>
 
     <div class="div-section">

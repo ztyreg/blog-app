@@ -42,8 +42,9 @@ if (isset($_POST['submit'])) {
             <label for="password">Password</label>
             <input type="password" id="password" name="password" value="<?php echo htmlentities($password); ?>">
         </div>
+        <br>
         <div class="form-group">
-            <input type="submit" name="submit" value="Submit" class="btn-primary">
+            <input type="submit" name="submit" value="Submit" class="btn btn-primary">
         </div>
     </form>
 </div>
