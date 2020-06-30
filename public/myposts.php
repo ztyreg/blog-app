@@ -1,3 +1,8 @@
+<?php
+
+if (isset($_POST['create'])) {
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -75,8 +80,12 @@ include_once("../src/header.php");
         <div id="Write" class="tabcontent">
             <form action="myposts.php" method="post">
                 <div class="div-textarea">
+                    <label for="title"></label>
+                    <textarea class="story-title" id="title" placeholder="Untitled"></textarea>
+                </div>
+                <div class="div-textarea">
                     <label for="story"></label>
-                    <textarea id="story" placeholder="Start your story here..."></textarea>
+                    <textarea class="story-body" id="story" placeholder="Start your story here..."></textarea>
                 </div>
                 <br>
                 <button class="btn right" name="create">Post</button>
