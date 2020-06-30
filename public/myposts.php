@@ -46,7 +46,9 @@ include_once("../src/header.php");
 
 <div class="div-wide">
     <div class="div-title">
-        Hello, User!
+        <?php
+        echo 'Hello, ' . User::select_user_by_id($session->user_id)[0]->getUsername() . '!';
+        ?>
     </div>
 
 

@@ -6,6 +6,40 @@ class User
     public $username;
     public $password;
 
+    /**
+     * User constructor.
+     * @param $id
+     * @param $username
+     * @param $password
+     */
+    public function __construct($id, $username, $password)
+    {
+        $this->id = $id;
+        $this->username = $username;
+        $this->password = $password;
+    }
+
+    public static function select_user_by_id($id)
+    {
+        global $database;
+        $stmt = $database->connection->prepare("SELECT id, username, password FROM users WHERE id=?");
+        $stmt->bind_param('i', $id);
+        return self::execute_select($stmt);
+    }
+
+    private static function execute_select($stmt)
+    {
+        $stmt->execute();
+        $id = $username = $password = "";
+        $stmt->bind_result($id, $username, $password);
+        $result_array = array();
+        while ($stmt->fetch()) {
+            $result_array[] = new User($id, $username, $password);
+        }
+        $stmt->close();
+        return $result_array;
+    }
+
     public static function verify_user($username, $password)
     {
         global $database;
@@ -46,6 +80,30 @@ class User
         $stmt = $database->connection->prepare("INSERT INTO users (username, password) values (?, ?)");
         $stmt->bind_param('ss', $username, $password);
         return $stmt->execute();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPassword()
+    {
+        return $this->password;
     }
 
 
