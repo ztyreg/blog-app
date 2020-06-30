@@ -22,6 +22,44 @@ class Comment
         $this->content = $content;
     }
 
+    public static function select_comment_by_story_id($story_id)
+    {
+        global $database;
+        $stmt = $database->connection->prepare("SELECT id, user_id, story_id, content FROM comments WHERE story_id=? ORDER BY id;");
+        $stmt->bind_param('s', $story_id);
+        return self::execute_select($stmt);
+    }
+
+    private static function execute_select($stmt)
+    {
+        $stmt->execute();
+        $id = $user_id = $story_id = $content = "";
+        $stmt->bind_result($id, $user_id, $story_id, $content);
+        $result_array = array();
+        while ($stmt->fetch()) {
+            $result_array[] = new Comment($id, $user_id, $story_id, $content);
+        }
+        $stmt->close();
+        return $result_array;
+    }
+
+    public static function create_comment($user_id, $story_id, $content)
+    {
+        global $database;
+        $content = $database->escape_string($content);
+
+        // insert comment
+        echo $user_id . '<br>';
+        echo $story_id . '<br>';
+        echo $content . '<br>';
+        $stmt = $database->connection->prepare("INSERT INTO comments (user_id, story_id, content) VALUES (?, ?, ?);");
+        $stmt->bind_param('iss', $user_id, $story_id, $content);
+        if (!$stmt->execute()) {
+            echo 'error';
+        }
+        $stmt->close();
+    }
+
     /**
      * @return mixed
      */
