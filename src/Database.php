@@ -11,6 +11,9 @@ class Database
         $this->open_db_connection();
     }
 
+    /**
+     * Open db
+     */
     public function open_db_connection()
     {
         $this->connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
@@ -21,20 +24,11 @@ class Database
 
     }
 
-    public function query($sql)
-    {
-        $result = $this->connection->query($sql);
-        $this->confirm_query($result);
-        return $result;
-    }
-
-    private function confirm_query($result)
-    {
-        if (!$result) {
-            die("Query Failed");
-        }
-    }
-
+    /**
+     * Escape input
+     * @param $string
+     * @return mixed
+     */
     public function escape_string($string)
     {
         return $this->connection->real_escape_string($string);

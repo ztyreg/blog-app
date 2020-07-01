@@ -1,11 +1,13 @@
 <?php
 require_once("../src/init.php");
 
+// redirect if already signed in
 if ($session->is_signed_in()) {
     redirect("index.php");
 }
 
 $login_message = "";
+// sign in
 if (isset($_POST['submit'])) {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);

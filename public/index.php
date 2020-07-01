@@ -1,10 +1,12 @@
 <?php
 require_once ("../src/init.php");
 
+// display number
 if (!isset($_SESSION['number'])) {
     $_SESSION['number'] = 50;
 }
 
+// change display number
 if (isset($_POST['filter']) && $session->verifyToken($_POST['token'])) {
     $_SESSION['number'] = (int) $_POST['limit'];
     redirect("process.php");

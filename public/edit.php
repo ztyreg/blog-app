@@ -10,12 +10,8 @@ if ($edit_type == null || $edit_id == null) {
     redirect("index.php");
 }
 
-
-//TODO
-// cannot edit other's
-
-
 $title = $content = "";
+// display different UI based on edit type
 if ($edit_type == "story") {
     $story = Story::select_story_by_id($edit_id)[0];
     if ($story->getUserId() != $session->user_id) {

@@ -23,6 +23,7 @@ class Session
             $this->user_id = $_SESSION['user_id'] = $user_id;
             $this->signed_in = true;
         }
+        // generate token
         $this->token = $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
     }
 
@@ -44,6 +45,11 @@ class Session
         }
     }
 
+    /**
+     * CSRF token
+     * @param string $token
+     * @return bool
+     */
     public function verifyToken(string $token)
     {
         if (!hash_equals($token, $this->token)) {

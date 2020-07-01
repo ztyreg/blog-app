@@ -3,6 +3,7 @@ ob_start();
 require_once("init.php");
 
 
+// display different title bar
 if (!$session->is_signed_in()) {
     echo '<div class="topnav">
     <a href="index.php">Home</a>

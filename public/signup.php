@@ -6,6 +6,7 @@ if ($session->is_signed_in()) {
 }
 
 $signup_message = "";
+// create account
 if (isset($_POST['submit'])) {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);

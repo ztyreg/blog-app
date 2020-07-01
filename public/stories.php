@@ -4,10 +4,12 @@ require_once("../src/init.php");
 $title = "";
 $user_id = "";
 $body = "";
+// get story from database
 if (isset($_GET['id']) && $story = Story::select_story_by_id((int)$_GET['id'])[0]) {
     $title = $story->getTitle();
     $user_id = $story->getUserId();
     $body = $story->getContent();
+    // change \r\n to <br>
     $title = str_replace(array("\r\n", "\r", "\n", "\\r", "\\n", "\\r\\n"), "<br/>", $title);
     $body = str_replace(array("\r\n", "\r", "\n", "\\r", "\\n", "\\r\\n"), "<br/>", $body);
 } else {
@@ -17,6 +19,7 @@ if (isset($_GET['id']) && $story = Story::select_story_by_id((int)$_GET['id'])[0
     redirect("index.php");
 }
 
+// add comment
 if (isset($_POST['submit']) && $session->verifyToken($_POST['token'])) {
     $content = $_POST['comment'];
     if (!empty($content)) {
