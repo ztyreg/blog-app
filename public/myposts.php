@@ -1,6 +1,10 @@
 <?php
 require_once("../src/init.php");
 
+if (!$session->is_signed_in()) {
+    redirect("index.php");
+}
+
 $post_message = "";
 
 // new post

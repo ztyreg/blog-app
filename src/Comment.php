@@ -125,7 +125,7 @@ class Comment
      */
     public function getContent()
     {
-        return $this->content;
+        return htmlentities($this->content);
     }
 
 

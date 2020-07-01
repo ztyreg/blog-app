@@ -125,7 +125,7 @@ class Story
      */
     public function getTitle()
     {
-        return $this->title;
+        return htmlentities($this->title);
     }
 
     /**
@@ -133,7 +133,7 @@ class Story
      */
     public function getContent()
     {
-        return $this->content;
+        return htmlentities($this->content);
     }
 
     /**

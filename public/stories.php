@@ -8,6 +8,8 @@ if (isset($_GET['id']) && $story = Story::select_story_by_id((int)$_GET['id'])[0
     $title = $story->getTitle();
     $user_id = $story->getUserId();
     $body = $story->getContent();
+    $title = str_replace(array("\r\n","\r","\n","\\r","\\n","\\r\\n"),"<br/>",$title);
+    $body = str_replace(array("\r\n","\r","\n","\\r","\\n","\\r\\n"),"<br/>",$body);
 } else {
     $title = "Ooops...";
     $user_id = "";
