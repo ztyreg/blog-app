@@ -33,7 +33,7 @@ if (isset($_POST['submit']) && $session->verifyToken($_POST['token'])) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Story</title>
     <link rel="stylesheet" href="css/default.css">
 </head>
 <body>

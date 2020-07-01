@@ -12,7 +12,7 @@ if ($user_id == null || empty(User::select_user_by_id($user_id))) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Stories</title>
+    <title>Profile</title>
     <link rel="stylesheet" href="css/default.css">
 </head>
 <body>

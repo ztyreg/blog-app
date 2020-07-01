@@ -72,7 +72,7 @@ if (isset($_POST['create']) && $session->verifyToken($_POST['token'])) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Stories</title>
+    <title>Edit</title>
     <link rel="stylesheet" href="css/default.css">
 </head>
 <body>

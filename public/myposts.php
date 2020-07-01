@@ -69,7 +69,7 @@ foreach (Comment::select_comment_by_user_id($session->user_id) as $comment) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Stories</title>
+    <title>My Posts</title>
     <link rel="stylesheet" href="css/default.css">
 </head>
 <body>
