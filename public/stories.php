@@ -2,12 +2,15 @@
 require_once("../src/init.php");
 
 $title = "";
+$user_id = "";
 $body = "";
 if (isset($_GET['id']) && $story = Story::select_story_by_id((int)$_GET['id'])[0]) {
     $title = $story->getTitle();
+    $user_id = $story->getUserId();
     $body = $story->getContent();
 } else {
     $title = "Ooops...";
+    $user_id = "";
     $body = "Story not found";
     redirect("home.php");
 }
@@ -42,6 +45,12 @@ include_once("../src/header.php");
     <div class="div-title">
         <?php
         echo $title;
+        ?>
+    </div>
+
+    <div class="div-title2">
+        <?php
+        echo "By " . User::find_username_from_id($user_id);
         ?>
     </div>
 

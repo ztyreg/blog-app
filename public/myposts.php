@@ -97,7 +97,7 @@ include_once("../src/header.php");
                 foreach (Story::select_story_by_user_id($session->user_id) as $story) {
                     echo '<tr>';
                     echo '<td><a href = "stories.php?id=' . $story->getLink() . '" > ' . $story->getTitle() . '</a ></td>';
-                    echo '<td style="width: 200px; text-align: center"><form action="myposts.php" method="post">';
+                    echo '<td style="width: 200px;"><form action="myposts.php" method="post">';
                     echo '<input type="submit" class="btn" value="Edit" name="editstory' . $story->getId() . '"/>';
                     echo '<input type="submit" class="btn" value="Delete" name="deletestory' . $story->getId() . '"/>';
                     echo '</form></td>';
@@ -110,9 +110,9 @@ include_once("../src/header.php");
         <div id="Comments" class="tabcontent">
             <table>
                 <tr>
-                    <th style="text-align: center;">Story</th>
-                    <th style="width: 500px; text-align: center">Comment</th>
-                    <th style="text-align: center;">Actions</th>
+                    <th>Story</th>
+                    <th style="width: 500px;">Comment</th>
+                    <th style="width: 200px;">Actions</th>
                 </tr>
                 <?php
                 foreach (Comment::select_comment_by_user_id($session->user_id) as $comment) {
@@ -120,7 +120,7 @@ include_once("../src/header.php");
                     echo '<tr>';
                     echo '<td><a href = "stories.php?id=' . htmlentities($story->getLink()) . '" > ' . $story->getTitle() . '</a ></td>';
                     echo '<td>' . $comment->getContent() . '</td>';
-                    echo '<td style="width: 200px; text-align: center"><form action="myposts.php" method="post">';
+                    echo '<td style="width: 200px;"><form action="myposts.php" method="post">';
                     echo '<input type="submit" class="btn" value="Edit" name="editcomment' . $comment->getId() . '"/>';
                     echo '<input type="submit" class="btn" value="Delete" name="deletecomment' . $comment->getId() . '"/>';
                     echo '</form></td>';

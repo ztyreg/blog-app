@@ -22,13 +22,14 @@ include_once("../src/header.php");
         <table>
             <tr>
                 <th>Title</th>
-                <th>Author</th>
+                <th style="width: 200px">Author</th>
             </tr>
             <?php
             foreach (Story::select_all_stories() as $story) {
-                echo '<tr>
-                <td><a href="stories.php?id=' . $story->getLink() . '">' . $story->getTitle() . '</a></td>
-                <td>' . $story->getUserId() . '</td>
+                echo '<tr>';
+                echo '<td><a href="stories.php?id=' . $story->getLink() . '">' . $story->getTitle() . '</a></td>';
+                $username = User::find_username_from_id($story->getUserId());
+                echo '<td>' . $username . '</td>
             </tr>';
             }
             ?>

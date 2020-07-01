@@ -18,8 +18,18 @@ if ($edit_type == null || $edit_id == null) {
 $title = $content = "";
 if ($edit_type == "story") {
     $story = Story::select_story_by_id($edit_id)[0];
+    if ($story->getUserId() != $session->user_id) {
+        redirect("home.php");
+    }
     $title = $story->getTitle();
     $content = $story->getContent();
+} elseif ($edit_type == "comment") {
+    $comment = Comment::select_comment_by_id($edit_id)[0];
+    if ($comment->getUserId() != $session->user_id) {
+        redirect("home.php");
+    }
+    $title = "Below is your comment";
+    $content = $comment->getContent();
 }
 
 // abort
@@ -31,17 +41,29 @@ if (isset($_POST['cancel'])) {
 if (isset($_POST['create'])) {
     $title = trim($_POST['title']);
     $content = trim($_POST['body']);
-    if (empty($title)) {
-        $post_message = "Title cannot be empty!";
-    } elseif (empty($content)) {
-        $post_message = "Story cannot be empty!";
-    } else {
-        Story::update_story($title, $content, $edit_id);
-        $post_message = "";
-        redirect("stories.php?id=" . $edit_id);
+
+    if ($edit_type == "story") {
+        // update story
+        if (empty($title)) {
+            $post_message = "Title cannot be empty!";
+        } elseif (empty($content)) {
+            $post_message = "Story cannot be empty!";
+        } else {
+            Story::update_story($title, $content, $edit_id);
+            $post_message = "";
+            redirect("stories.php?id=" . $edit_id);
+        }
+    } elseif ($edit_type == "comment") {
+        // update comment
+        if (empty($content)) {
+            $post_message = "Comment cannot be empty!";
+        } else {
+            Comment::update_comment($content, $edit_id);
+            $post_message = "";
+            redirect("stories.php?id=" . Comment::select_comment_by_id($edit_id)[0]->getStoryId());
+        }
     }
 }
-
 
 
 ?>
@@ -71,7 +93,13 @@ include_once("../src/header.php");
 
         <?php
         echo 'You are editing ';
-        echo htmlentities($edit_type) . ' ' . htmlentities(Story::select_story_by_id($edit_id)[0]->getTitle());
+        if ($edit_type == "story") {
+            echo htmlentities($edit_type) . ' the following story: ' . htmlentities(Story::select_story_by_id($edit_id)[0]->getTitle());
+        } elseif ($edit_type == "comment") {
+            $story_id = Comment::select_comment_by_id($edit_id)[0]->getStoryId();
+            $story_title = Story::select_story_by_id($story_id)[0]->getTitle();
+            echo htmlentities($edit_type) . ' of the following story: ' . htmlentities($story_title);
+        }
         ?>
         <br><br>
         <div class="tab">
@@ -79,9 +107,8 @@ include_once("../src/header.php");
         </div>
 
 
-
         <div id="Write" class="tabcontent">
-            <form action="edit.php?type=<?php echo $edit_type?>&id=<?php echo $edit_id?>" method="post">
+            <form action="edit.php?type=<?php echo $edit_type ?>&id=<?php echo $edit_id ?>" method="post">
                 <div class="div-story-title">
                     <label for="title"></label>
                     <textarea class="story-title" id="title" name="title" placeholder="Untitled"><?php

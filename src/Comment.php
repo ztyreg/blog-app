@@ -22,6 +22,14 @@ class Comment
         $this->content = $content;
     }
 
+    public static function select_comment_by_id($id)
+    {
+        global $database;
+        $stmt = $database->connection->prepare("SELECT id, user_id, story_id, content FROM comments WHERE id=? ORDER BY id;");
+        $stmt->bind_param('s', $id);
+        return self::execute_select($stmt);
+    }
+
     public static function select_comment_by_story_id($story_id)
     {
         global $database;
@@ -73,6 +81,17 @@ class Comment
         global $database;
         $stmt = $database->connection->prepare("DELETE FROM comments WHERE id=?");
         $stmt->bind_param('i', $comment_id);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+    public static function update_comment($new_content, $id)
+    {
+        global $database;
+        $new_content = $database->escape_string($new_content);
+
+        $stmt = $database->connection->prepare("UPDATE comments SET content=? WHERE id=?;");
+        $stmt->bind_param('ss', $new_content, $id);
         $stmt->execute();
         $stmt->close();
     }
