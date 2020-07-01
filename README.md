@@ -38,7 +38,7 @@ If you click on the name of a user, you can see their profile:
 
 ### Number of stories to display
 
-In `home.php` you can choose how many stories to display
+In `index.php` you can choose how many stories to display
 
 ### UI and UX
 
