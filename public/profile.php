@@ -2,7 +2,7 @@
 require_once("../src/init.php");
 
 $user_id = $_GET['id'];
-if ($user_id == null) {
+if ($user_id == null || empty(User::select_user_by_id($user_id))) {
     redirect("home.php");
 }
 
@@ -25,7 +25,7 @@ include_once("../src/header.php");
 <div class="div-wide">
     <div class="div-title">
         <?php
-        echo 'The profile of ' . 'User';
+        echo 'The profile of ' . HtmlUtils::createUserTag(User::select_user_by_id($user_id)[0], "title");
         ?>
     </div>
 
@@ -91,7 +91,7 @@ include_once("../src/header.php");
 
             let activeTab = localStorage.getItem("active");
             if (activeTab == null) {
-                activeTab = "Write";
+                activeTab = "Stories";
             }
 
             document.getElementById(activeTab + "Tab").click();

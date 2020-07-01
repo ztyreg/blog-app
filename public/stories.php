@@ -50,7 +50,7 @@ include_once("../src/header.php");
 
     <div class="div-title2">
         <?php
-        echo "By " . User::find_username_from_id($user_id);
+        echo "By " . HtmlUtils::createUserTag(User::select_user_by_id($user_id)[0], "title2");
         ?>
     </div>
 

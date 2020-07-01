@@ -12,6 +12,10 @@ include_once("../src/header.php");
 ?>
 
 <div class="div-center">
+    CSE330 Module 3:
+    Simple content management system
+    <br>
+    <br>
     © 2020 Ethan Zheng All Rights Reserved
 </div>
 

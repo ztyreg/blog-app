@@ -2,9 +2,9 @@
 
 class User
 {
-    public $id;
-    public $username;
-    public $password;
+    private $id;
+    private $username;
+    private $password;
 
     /**
      * User constructor.

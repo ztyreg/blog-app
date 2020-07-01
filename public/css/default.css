@@ -63,6 +63,19 @@ h1 {
     padding-top: 30px;
 }
 
+.title {
+    font-size: 40px;
+}
+
+.title2 {
+    font-size: 28px;
+}
+
+a:link {
+    color: black;
+}
+
+
 .div-article {
     color: rgba(7, 12, 33, 0.85);
     font-size: 22px;

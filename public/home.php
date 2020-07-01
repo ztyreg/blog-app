@@ -28,7 +28,7 @@ include_once("../src/header.php");
             foreach (Story::select_all_stories() as $story) {
                 echo '<tr>';
                 echo '<td><a href="stories.php?id=' . $story->getLink() . '">' . $story->getTitle() . '</a></td>';
-                $username = User::find_username_from_id($story->getUserId());
+                $username = HtmlUtils::createUserTag(User::select_user_by_id($story->getUserId())[0], "");
                 echo '<td>' . $username . '</td>
             </tr>';
             }

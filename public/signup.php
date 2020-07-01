@@ -11,8 +11,8 @@ if (isset($_POST['submit'])) {
     $password = trim($_POST['password']);
 
     if (User::create_user($username, $password)) {
-        $signup_message = "Successfully created account, taking you back to the home page...";
-        header( "refresh:1;url=home.php" );
+        $signup_message = "Successfully created account, please try to login now. Taking you back to the home page after 3 seconds...";
+        header( "refresh:3;url=home.php" );
     } else {
         $signup_message = "This user already exists.";
     }

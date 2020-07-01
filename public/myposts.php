@@ -87,9 +87,9 @@ include_once("../src/header.php");
 
         Manage your stories and comments here. Or, create a new story. <br><br>
         <div class="tab">
-            <button class="tablinks" onclick="openTab(event, 'Stories')" id="StoriesTab">My stories</button>
-            <button class="tablinks" onclick="openTab(event, 'Comments')" id="CommentsTab">My comments</button>
-            <button class="tablinks right" onclick="openTab(event, 'Write')" id="WriteTab">New story</button>
+            <button class="tablinks" onclick="openTab(event, 'Write')" id="WriteTab">New story</button>
+            <button class="tablinks right" onclick="openTab(event, 'Comments')" id="CommentsTab">My comments</button>
+            <button class="tablinks right" onclick="openTab(event, 'Stories')" id="StoriesTab">My stories</button>
         </div>
 
         <div id="Stories" class="tabcontent">
