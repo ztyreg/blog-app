@@ -38,7 +38,8 @@ if (isset($_POST['cancel'])) {
 }
 
 // update post
-if (isset($_POST['create'])) {
+if (isset($_POST['create']) && $session->verifyToken($_POST['token'])) {
+
     $title = trim($_POST['title']);
     $content = trim($_POST['body']);
 
@@ -136,6 +137,7 @@ include_once("../src/header.php");
                 ?>
                 <button class="btn right" name="create" style="margin-left: 10px">Post</button>
                 <button class="btn right" name="cancel">Cancel</button>
+                <input type="hidden"  name="token" value="<?php $session->getToken(); ?>">
             </form>
         </div>
 

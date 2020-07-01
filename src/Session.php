@@ -3,6 +3,7 @@
 class Session
 {
     private $signed_in = false;
+    private $token = "";
     public $user_id;
 
     function __construct()
@@ -22,6 +23,7 @@ class Session
             $this->user_id = $_SESSION['user_id'] = $user_id;
             $this->signed_in = true;
         }
+        $this->token = $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
     }
 
     public function logout()
@@ -40,6 +42,22 @@ class Session
             unset($this->user_id);
             $this->signed_in = false;
         }
+    }
+
+    public function verifyToken(string $token)
+    {
+        if (!hash_equals($token, $this->token)) {
+            die("Request forgery detected");
+        }
+        return true;
+    }
+
+    /**
+     * @return string
+     */
+    public function getToken(): string
+    {
+        return $this->token;
     }
 
 }

@@ -58,22 +58,13 @@ class User
         $stmt->bind_result($cnt, $db_user_id, $db_password);
         $stmt->fetch();
         $stmt->close();
-        if ($cnt == 1 && $password == $db_password) {
+        if ($cnt == 1 && password_verify($password, $db_password)) {
             // Login succeeded!
             return $db_user_id;
-            // Redirect to your target page
         } else {
             // Login failed; redirect back to the login screen
             return false;
         }
-//        if($cnt == 1 && password_verify($pwd_guess, $pwd_hash)){
-//            // Login succeeded!
-//            $_SESSION['user_id'] = $user_id;
-//            // Redirect to your target page
-//        } else{
-//            // Login failed; redirect back to the login screen
-//        }
-//        return !empty($the_result_array) ? array_shift($the_result_array) : false;
     }
 
     public static function create_user($username, $password)
@@ -81,6 +72,7 @@ class User
         global $database;
         $username = $database->escape_string($username);
         $password = $database->escape_string($password);
+        $password = password_hash($password, PASSWORD_DEFAULT);
         // prepare statement
         $stmt = $database->connection->prepare("INSERT INTO users (username, password) values (?, ?)");
         $stmt->bind_param('ss', $username, $password);

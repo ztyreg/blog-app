@@ -4,7 +4,8 @@ require_once("../src/init.php");
 $post_message = "";
 
 // new post
-if (isset($_POST['create'])) {
+if (isset($_POST['create']) && $session->verifyToken($_POST['token'])) {
+
     $title = trim($_POST['title']);
     $content = trim($_POST['body']);
     $user_id = $session->user_id;
@@ -22,6 +23,7 @@ if (isset($_POST['create'])) {
 // edit story
 foreach (Story::select_story_by_user_id($session->user_id) as $story) {
     $button_clicked = 'editstory' . $story->getId();
+    // take the user to edit page
     if (isset($_POST[$button_clicked])) {
         redirect("edit.php?type=story&id=" . $story->getId());
     }
@@ -30,6 +32,7 @@ foreach (Story::select_story_by_user_id($session->user_id) as $story) {
 // edit comment
 foreach (Comment::select_comment_by_user_id($session->user_id) as $comment) {
     $button_clicked = 'editcomment' . $comment->getId();
+    // take the user to edit page
     if (isset($_POST[$button_clicked])) {
         redirect("edit.php?type=comment&id=" . $comment->getId());
     }
@@ -38,7 +41,8 @@ foreach (Comment::select_comment_by_user_id($session->user_id) as $comment) {
 // delete story
 foreach (Story::select_story_by_user_id($session->user_id) as $story) {
     $button_clicked = 'deletestory' . $story->getId();
-    if (isset($_POST[$button_clicked])) {
+    // verify CSRF token before deleting
+    if (isset($_POST[$button_clicked]) && $session->verifyToken($_POST['token'])) {
         Story::delete_story($story->getId());
         // to prevent the user from submitting the form again by refreshing the page
         redirect("process.php");
@@ -48,7 +52,8 @@ foreach (Story::select_story_by_user_id($session->user_id) as $story) {
 // delete comment
 foreach (Comment::select_comment_by_user_id($session->user_id) as $comment) {
     $button_clicked = 'deletecomment' . $comment->getId();
-    if (isset($_POST[$button_clicked])) {
+    // verify CSRF token before deleting
+    if (isset($_POST[$button_clicked]) && $session->verifyToken($_POST['token'])) {
         Comment::delete_comment($comment->getId());
         // to prevent the user from submitting the form again by refreshing the page
         redirect("process.php");
@@ -100,6 +105,7 @@ include_once("../src/header.php");
                     echo '<td style="width: 200px;"><form action="myposts.php" method="post">';
                     echo '<input type="submit" class="btn" value="Edit" name="editstory' . $story->getId() . '"/>';
                     echo '<input type="submit" class="btn" value="Delete" name="deletestory' . $story->getId() . '"/>';
+                    echo '<input type="hidden" name="token" value="' . $session->getToken() . '">';
                     echo '</form></td>';
                     echo '</tr>';
                 }
@@ -123,6 +129,7 @@ include_once("../src/header.php");
                     echo '<td style="width: 200px;"><form action="myposts.php" method="post">';
                     echo '<input type="submit" class="btn" value="Edit" name="editcomment' . $comment->getId() . '"/>';
                     echo '<input type="submit" class="btn" value="Delete" name="deletecomment' . $comment->getId() . '"/>';
+                    echo '<input type="hidden" name="token" value="' . $session->getToken() . '">';
                     echo '</form></td>';
                     echo '</tr>';
                 }
@@ -154,6 +161,7 @@ include_once("../src/header.php");
                 echo $post_message;
                 ?>
                 <button class="btn right" name="create">Post</button>
+                <input type="hidden" name="token" value="<?php $session->getToken(); ?>">
             </form>
         </div>
 

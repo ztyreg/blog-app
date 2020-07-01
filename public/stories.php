@@ -15,7 +15,7 @@ if (isset($_GET['id']) && $story = Story::select_story_by_id((int)$_GET['id'])[0
     redirect("home.php");
 }
 
-if (isset($_POST['submit'])) {
+if (isset($_POST['submit']) && $session->verifyToken($_POST['token'])) {
     $content = $_POST['comment'];
     if (!empty($content)) {
         $story_id = $_POST['pageId'];
@@ -89,6 +89,8 @@ include_once("../src/header.php");
         }
         echo '</textarea>';
         echo '<input type="hidden" id="pageId" name="pageId" value="' . htmlentities($_GET['id']) . '">';
+        // pass CSRF token
+        echo '<input type="hidden"  name="token" value="' . $session->getToken() . '">';
         echo '</form>';
         echo '</div>';
     }
