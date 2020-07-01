@@ -12,7 +12,7 @@ if (isset($_GET['id']) && $story = Story::select_story_by_id((int)$_GET['id'])[0
     $title = "Ooops...";
     $user_id = "";
     $body = "Story not found";
-    redirect("home.php");
+    redirect("index.php");
 }
 
 if (isset($_POST['submit']) && $session->verifyToken($_POST['token'])) {

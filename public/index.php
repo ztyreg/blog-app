@@ -31,7 +31,7 @@ include_once("../src/header.php");
 
     <div class="div-gap">
         The latest stories.
-        <form action="home.php" class="right" method="post">
+        <form action="index.php" class="right" method="post">
             <label for="limit">Max number of stories: </label>
             <input type="number" id="limit" name="limit" style="width: 60px; font-size: 16px" value="<?php echo $_SESSION['number']?>">
             <input type="hidden" name="token" value="<?php $session->getToken(); ?>">

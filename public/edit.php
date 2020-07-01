@@ -7,7 +7,7 @@ $post_message = "";
 $edit_type = $_GET['type'];
 $edit_id = (int)$_GET['id'];
 if ($edit_type == null || $edit_id == null) {
-    redirect("home.php");
+    redirect("index.php");
 }
 
 
@@ -19,14 +19,14 @@ $title = $content = "";
 if ($edit_type == "story") {
     $story = Story::select_story_by_id($edit_id)[0];
     if ($story->getUserId() != $session->user_id) {
-        redirect("home.php");
+        redirect("index.php");
     }
     $title = $story->getTitle();
     $content = $story->getContent();
 } elseif ($edit_type == "comment") {
     $comment = Comment::select_comment_by_id($edit_id)[0];
     if ($comment->getUserId() != $session->user_id) {
-        redirect("home.php");
+        redirect("index.php");
     }
     $title = "Below is your comment";
     $content = $comment->getContent();

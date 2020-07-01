@@ -2,7 +2,7 @@
 require_once("../src/init.php");
 
 if ($session->is_signed_in()) {
-    redirect("home.php");
+    redirect("index.php");
 }
 
 $login_message = "";
@@ -12,7 +12,7 @@ if (isset($_POST['submit'])) {
 
     if ($user_id = User::verify_user($username, $password)) {
         $session->login($user_id);
-        redirect("home.php");
+        redirect("index.php");
     } else {
         $login_message = "Your password or username are incorrect";
     }

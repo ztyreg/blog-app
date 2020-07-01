@@ -3,7 +3,7 @@ require_once("../src/init.php");
 
 $user_id = $_GET['id'];
 if ($user_id == null || empty(User::select_user_by_id($user_id))) {
-    redirect("home.php");
+    redirect("index.php");
 }
 
 

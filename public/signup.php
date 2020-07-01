@@ -2,7 +2,7 @@
 require_once("../src/init.php");
 
 if ($session->is_signed_in()) {
-    redirect("home.php");
+    redirect("index.php");
 }
 
 $signup_message = "";
@@ -12,7 +12,7 @@ if (isset($_POST['submit'])) {
 
     if (User::create_user($username, $password)) {
         $signup_message = "Successfully created account, please try to login now. Taking you back to the home page after 3 seconds...";
-        header( "refresh:3;url=home.php" );
+        header( "refresh:3;url=index.php" );
     } else {
         $signup_message = "This user already exists.";
     }
