@@ -8,8 +8,8 @@ if (isset($_GET['id']) && $story = Story::select_story_by_id((int)$_GET['id'])[0
     $title = $story->getTitle();
     $user_id = $story->getUserId();
     $body = $story->getContent();
-    $title = str_replace(array("\r\n","\r","\n","\\r","\\n","\\r\\n"),"<br/>",$title);
-    $body = str_replace(array("\r\n","\r","\n","\\r","\\n","\\r\\n"),"<br/>",$body);
+    $title = str_replace(array("\r\n", "\r", "\n", "\\r", "\\n", "\\r\\n"), "<br/>", $title);
+    $body = str_replace(array("\r\n", "\r", "\n", "\\r", "\\n", "\\r\\n"), "<br/>", $body);
 } else {
     $title = "Ooops...";
     $user_id = "";
@@ -71,7 +71,8 @@ include_once("../src/header.php");
     foreach (Comment::select_comment_by_story_id($_GET['id']) as $comment) {
         echo '<div class="div-comment">';
         echo User::find_username_from_id($comment->getUserId()) . ': ';
-        echo $comment->getContent();
+        $clean_comment = str_replace(array("\r\n", "\r", "\n", "\\r", "\\n", "\\r\\n"), "<br/>", $comment->getContent());
+        echo $clean_comment;
         echo '</div>';
     }
     ?>
