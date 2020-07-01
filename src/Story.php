@@ -98,6 +98,19 @@ class Story
         return $next_id;
     }
 
+    public static function update_story($new_title, $new_content, $id)
+    {
+        global $database;
+        $new_title = $database->escape_string($new_title);
+        $new_content = $database->escape_string($new_content);
+
+        $stmt = $database->connection->prepare("UPDATE stories SET title=?, content=? WHERE id=?;");
+        $stmt->bind_param('sss', $new_title, $new_content, $id);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+
     /**
      * @return mixed
      */

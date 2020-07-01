@@ -6,14 +6,14 @@ $post_message = "";
 // new post
 if (isset($_POST['create'])) {
     $title = trim($_POST['title']);
-    $body = trim($_POST['body']);
+    $content = trim($_POST['body']);
     $user_id = $session->user_id;
     if (empty($title)) {
         $post_message = "Title cannot be empty!";
-    } elseif (empty($body)) {
+    } elseif (empty($content)) {
         $post_message = "Story cannot be empty!";
     } else {
-        $id = Story::create_story($title, $body, $user_id);
+        $id = Story::create_story($title, $content, $user_id);
         $post_message = "";
         redirect("stories.php?id=" . $id);
     }

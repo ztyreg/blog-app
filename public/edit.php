@@ -5,15 +5,11 @@ $post_message = "";
 
 // what are we editing?
 $edit_type = $_GET['type'];
-$edit_id = $_GET['id'];
+$edit_id = (int)$_GET['id'];
 if ($edit_type == null || $edit_id == null) {
     redirect("home.php");
 }
 
-
-if (isset($_POST['cancel'])) {
-    redirect("myposts.php");
-}
 
 //TODO
 // cannot edit other's
@@ -26,21 +22,25 @@ if ($edit_type == "story") {
     $content = $story->getContent();
 }
 
-// new post
-//if (isset($_POST['create'])) {
-//    $title = trim($_POST['title']);
-//    $body = trim($_POST['body']);
-//    $user_id = $session->user_id;
-//    if (empty($title)) {
-//        $post_message = "Title cannot be empty!";
-//    } elseif (empty($body)) {
-//        $post_message = "Story cannot be empty!";
-//    } else {
-//        $id = Story::create_story($title, $body, $user_id);
-//        $post_message = "";
-//        redirect("stories.php?id=" . $id);
-//    }
-//}
+// abort
+if (isset($_POST['cancel'])) {
+    redirect("myposts.php");
+}
+
+// update post
+if (isset($_POST['create'])) {
+    $title = trim($_POST['title']);
+    $content = trim($_POST['body']);
+    if (empty($title)) {
+        $post_message = "Title cannot be empty!";
+    } elseif (empty($content)) {
+        $post_message = "Story cannot be empty!";
+    } else {
+        Story::update_story($title, $content, $edit_id);
+        $post_message = "";
+        redirect("stories.php?id=" . $edit_id);
+    }
+}
 
 
 
@@ -81,7 +81,7 @@ include_once("../src/header.php");
 
 
         <div id="Write" class="tabcontent">
-            <form action="edit.php" method="post">
+            <form action="edit.php?type=<?php echo $edit_type?>&id=<?php echo $edit_id?>" method="post">
                 <div class="div-story-title">
                     <label for="title"></label>
                     <textarea class="story-title" id="title" name="title" placeholder="Untitled"><?php

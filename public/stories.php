@@ -3,9 +3,9 @@ require_once("../src/init.php");
 
 $title = "";
 $body = "";
-if (isset($_GET['id']) && $story = Story::select_story_by_id($_GET['id'])[0]) {
+if (isset($_GET['id']) && $story = Story::select_story_by_id((int)$_GET['id'])[0]) {
     $title = $story->getTitle();
-    $body = $story->getBody();
+    $body = $story->getContent();
 } else {
     $title = "Ooops...";
     $body = "Story not found";
