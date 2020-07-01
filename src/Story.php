@@ -41,10 +41,11 @@ class Story
         return self::execute_select($stmt);
     }
 
-    public static function select_all_stories()
+    public static function select_all_stories($limit=1e3)
     {
         global $database;
-        $stmt = $database->connection->prepare("SELECT id, user_id, title, content, link FROM stories ORDER BY id DESC LIMIT 50");
+        $stmt = $database->connection->prepare("SELECT id, user_id, title, content, link FROM stories ORDER BY id DESC LIMIT ?");
+        $stmt->bind_param('i', $limit);
         return self::execute_select($stmt);
     }
 
