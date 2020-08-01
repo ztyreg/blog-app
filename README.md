@@ -1,4 +1,4 @@
-# Calendar App
+# Blog Website (Content Management System)
 
 ## Login Credentials
 
